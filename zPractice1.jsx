@@ -1,14 +1,49 @@
-import jwt from 'jsonwebtoken';
+import { createSlice } from '@reduxjs/toolkit';
 
-export const verifyToken = (req, res, next) => {
-  const token = req.cookies.access_token;
-
-  if (!token) return next(errorHandler(401, 'Unauthorized'));
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return next(errorHandler(403, 'Forbidden'));
-
-    req.user = user;
-    next();
-  });
+const initialState = {
+  currentUser: null,
+  error: null,
+  loading: false,
 };
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState,
+  reducers: {
+    signInStart: (state) => {
+      state.loading = true;
+    },
+    signInSuccess: (state, action) => {
+      state.currentUser = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    signInFailure: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
+    updateUserStart: (state) => {
+      state.loading = true;
+    },
+    updateUserSuccess: (state, action) => {
+      state.currentUser = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    updateUserFailure: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
+  },
+});
+
+export const {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+  updateUserFailure,
+  updateUserSuccess,
+  updateUserStart,
+} = userSlice.actions;
+
+export default userSlice.reducer;
