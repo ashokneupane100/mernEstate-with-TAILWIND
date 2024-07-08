@@ -15,8 +15,6 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   signOutStart,
-  signOutSuccess,
-  signOutFailure,
 } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -144,7 +142,6 @@ export default function Profile() {
     }
   };
 
-
   const handleListingDelete = async (listingId) => {
     try {
       const res = await fetch(`/api/listing/delete/${listingId}`, {
@@ -170,8 +167,6 @@ export default function Profile() {
         <input
           onChange={(e) => setFile(e.target.files[0])}
           type='file'
-
-          
           ref={fileRef}
           hidden
           accept='image/*'
@@ -285,7 +280,9 @@ export default function Profile() {
                 >
                   Delete
                 </button>
-                <button className='text-green-700 uppercase'>Edit</button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className='text-green-700 uppercase'>Edit</button>
+                </Link>
               </div>
             </div>
           ))}
