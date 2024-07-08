@@ -144,6 +144,7 @@ export default function Profile() {
     }
   };
 
+
   const handleListingDelete = async (listingId) => {
     try {
       const res = await fetch(`/api/listing/delete/${listingId}`, {
@@ -169,6 +170,8 @@ export default function Profile() {
         <input
           onChange={(e) => setFile(e.target.files[0])}
           type='file'
+
+          
           ref={fileRef}
           hidden
           accept='image/*'
