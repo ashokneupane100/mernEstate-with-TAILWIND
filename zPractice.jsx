@@ -1,52 +1,75 @@
-export const getListings = async (req, res, next) => {
-    try {
-      const limit = parseInt(req.query.limit) || 9;
-      const startIndex = parseInt(req.query.startIndex) || 0;
-      
-      let offer = req.query.offer;
-  
-      if (offer === undefined || offer === 'false') {
-        offer = { $in: [false, true] };
-      }
-  
-      let furnished = req.query.furnished;
-  
-      if (furnished === undefined || furnished === 'false') {
-        furnished = { $in: [false, true] };
-      }
-  
-      let parking = req.query.parking;
-  
-      if (parking === undefined || parking === 'false') {
-        parking = { $in: [false, true] };
-      }
-  
-      let type = req.query.type;
-  
-      if (type === undefined || type === 'all') {
-        type = { $in: ['sale', 'rent'] };
-      }
-  
-      const searchTerm = req.query.searchTerm || '';
-  
-      const sort = req.query.sort || 'createdAt';
-  
-      const order = req.query.order || 'desc';
-  
-      const listings = await Listing.find({
-        name: { $regex: searchTerm, $options: 'i' },
-        offer,
-        furnished,
-        parking,
-        type,
-      })
-        .sort({ [sort]: order })
-        .limit(limit)
-        .skip(startIndex);
-  
-      return res.status(200).json(listings);
-    } catch (error) {
+import { FaSearch } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 
-      next(error);
-    }
+export default function Header() {
+  const { currentUser } = useSelector((state) => state.user);
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('searchTerm', searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
   };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get('searchTerm');
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [location.search]);
+  return (
+    <header className='bg-slate-200 shadow-md'>
+      <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
+        <Link to='/'>
+          <h1 className='font-bold text-sm sm:text-xl flex flex-wrap'>
+            <span className='text-slate-500'>Sahand</span>
+            <span className='text-slate-700'>Estate</span>
+          </h1>
+        </Link>
+        <form
+          onSubmit={handleSubmit}
+          className='bg-slate-100 p-3 rounded-lg flex items-center'
+        >
+          <input
+            type='text'
+            placeholder='Search...'
+            className='bg-transparent focus:outline-none w-24 sm:w-64'
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button>
+            <FaSearch className='text-slate-600' />
+          </button>
+        </form>
+        <ul className='flex gap-4'>
+          <Link to='/'>
+            <li className='hidden sm:inline text-slate-700 hover:underline'>
+              Home
+            </li>
+          </Link>
+          <Link to='/about'>
+            <li className='hidden sm:inline text-slate-700 hover:underline'>
+              About
+            </li>
+          </Link>
+          <Link to='/profile'>
+            {currentUser ? (
+              <img
+                className='rounded-full h-7 w-7 object-cover'
+                src={currentUser.avatar}
+                alt='profile'
+              />
+            ) : (
+              <li className=' text-slate-700 hover:underline'> Sign in</li>
+            )}
+          </Link>
+        </ul>
+      </div>
+    </header>
+  );
+}
