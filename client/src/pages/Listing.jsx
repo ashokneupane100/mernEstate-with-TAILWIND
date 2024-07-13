@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
@@ -8,12 +8,13 @@ import {
   FaBath,
   FaBed,
   FaChair,
-  FaMapMarkedAlt,
   FaMapMarkerAlt,
   FaParking,
   FaShare,
 } from "react-icons/fa";
 import numberToWords from "number-to-words";
+import { useSelector } from "react-redux";
+import Contact from "../components/Contact";
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
@@ -21,8 +22,12 @@ export default function Listing() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
-
+  const { currentUser } = useSelector((state) => state.user);
+  const [contact, setContact] = useState(false); // Initially false
   const params = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
     const fetchListing = async () => {
       try {
@@ -58,6 +63,14 @@ export default function Listing() {
     return result.trim();
   };
 
+  const handleSignInClick = () => {
+    sessionStorage.setItem("redirectPath", location.pathname);
+  };
+
+  const handleContactClick = () => {
+    setContact(true); // Set contact state to true when clicked
+  };
+
   return (
     <main>
       {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
@@ -89,18 +102,15 @@ export default function Listing() {
           >
             <FaShare className="text-slate-500" />
           </div>
-          {copied &&
-            setTimeout(() => {
-              setCopied(false);
-            }, 2000) && (
-              <p className="fixed top-[23%] right-[5%] z-10 rounded-md bg-slate-100 p-2">
-                Link Copied
-              </p>
-            )}
+          {copied && (
+            <p className="fixed top-[23%] right-[5%] z-10 rounded-md bg-slate-100 p-2">
+              Link Copied
+            </p>
+          )}
 
           <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4">
             <p className="text-2xl font-semibold">
-              {listing.name}-Rs {""}
+              {listing.name}-Rs{" "}
               {listing.offer
                 ? convertToIndianCurrencyWords(listing.discountPrice)
                 : convertToIndianCurrencyWords(listing.regularPrice)}
@@ -147,20 +157,33 @@ export default function Listing() {
 
               <li className="flex items-center gap-1 whitespace-nowrap">
                 <FaParking className="text-lg" />
-                {listing.parking ?
-                  "Parking"
-                  : `No Parking`}
+                {listing.parking ? "Parking" : `No Parking`}
               </li>
 
               <li className="flex items-center gap-1 whitespace-nowrap">
                 <FaChair className="text-lg" />
-               {listing.furnished ? "Furnished" : "Unfurnished"}  
+                {listing.furnished ? "Furnished" : "Unfurnished"}
               </li>
-
-
-
-
             </ul>
+            {currentUser && listing.userRef !== currentUser._id && !contact && (
+              <button onClick={handleContactClick} className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3">
+                Contact LandLord
+              </button>
+            )}
+            
+            {contact && <Contact listing={listing}/>}
+
+            {!currentUser && (
+              <Link
+                to={"/sign-in"}
+                onClick={handleSignInClick}
+                className="cursor-pointer"
+              >
+                <button className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3 w-full mt-4">
+                  Sign In to Contact the Landlord
+                </button>
+              </Link>
+            )}
           </div>
         </div>
       )}
