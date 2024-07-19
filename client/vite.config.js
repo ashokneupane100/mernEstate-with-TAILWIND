@@ -1,16 +1,12 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
+/** @type {import('tailwindcss').Config} */
+import lineClamp from '@tailwindcss/line-clamp';
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
-        secure: false,
-      },
-    },
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {},
   },
-
-  plugins: [react()],
-});
+  plugins: [
+    lineClamp,
+  ],
+};
