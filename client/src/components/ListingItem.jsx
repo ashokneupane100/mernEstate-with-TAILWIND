@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom';
 import { MdLocationOn } from 'react-icons/md';
 import { makeLakhs } from '../utils/makeLakhs';
-import { FaBath } from "react-icons/fa";
-import { FaBed } from "react-icons/fa";
-
+import { FaBath, FaBed } from 'react-icons/fa';
+import PropTypes from 'prop-types';
 
 export default function ListingItem({ listing }) {
   return (
-    <div className='bg-white shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px]'>
+    <div className='bg-blue-100 shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px]'>
       <Link to={`/listing/${listing._id}`}>
         <img
           src={
@@ -27,32 +26,54 @@ export default function ListingItem({ listing }) {
               {listing.address}
             </p>
           </div>
-          <p className='text-sm text-gray-600 line-clamp-2'>
-            {listing.description}
-          </p>
-          <p className='text-slate-500 mt-2 font-semibold '>
-            Rs &nbsp;
-            {listing.offer
-              ? makeLakhs(listing.discountPrice)
-              : makeLakhs(listing.regularPrice)}
-            {listing.type === 'rent' && ' / month'}
-          </p>
-          <div className='text-slate-700 flex gap-12'>
-            <div className='font-bold text-xs'>
+          <div className='text-slate-700 flex gap-12 '>
+            <div className='font-bold text-xs flex items-center gap-1 ml-2'>
+              
               <FaBed className='h-4 w-4 text-green-700' />
               {listing.bedrooms > 1
                 ? `${listing.bedrooms} beds `
                 : `${listing.bedrooms} bed `}
             </div>
-            <div className='font-bold text-xs'>
+            <div className='font-bold text-xs flex items-center gap-1'>
               <FaBath className='h-4 w-4 text-green-700' />
               {listing.bathrooms > 1
                 ? `${listing.bathrooms} baths `
                 : `${listing.bathrooms} bath `}
             </div>
           </div>
+          <div>
+          <p className='text-sm text-gray-600 line-clamp-2'>
+            {listing.description}
+          </p>
+        
+          <p className='text-slate-500 mt-2 font-semibold text-center'>
+            Rs &nbsp;
+            {listing.offer
+              ? makeLakhs(listing.discountPrice)
+              : makeLakhs(listing.regularPrice)}
+            {listing.type === 'rent' && ' / month'}
+          </p>
+          </div>
+        
         </div>
+        <br />
       </Link>
     </div>
   );
 }
+
+ListingItem.propTypes = {
+  listing: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    address: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    imageUrls: PropTypes.arrayOf(PropTypes.string).isRequired,
+    offer: PropTypes.bool.isRequired,
+    discountPrice: PropTypes.number,
+    regularPrice: PropTypes.number.isRequired,
+    type: PropTypes.oneOf(['rent', 'sale']).isRequired,
+    bedrooms: PropTypes.number.isRequired,
+    bathrooms: PropTypes.number.isRequired,
+  }).isRequired,
+};
