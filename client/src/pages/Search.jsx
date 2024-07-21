@@ -17,6 +17,7 @@ export default function Search() {
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
   const [showMore, setShowMore] = useState(false);
+  const [animatedSearchTerm, setAnimatedSearchTerm] = useState("Search Your favourite Properties");
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -66,6 +67,16 @@ export default function Search() {
     fetchListings();
   }, [location.search]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimatedSearchTerm((prev) =>
+        prev === "Search Your favourite Properties" ? "Type here..." : "Search Your favourite Properties"
+      );
+    }, 1000); // Adjust the interval time as needed
+
+    return () => clearInterval(interval);
+  }, []);
+
   const handleChange = (e) => {
     if (
       e.target.id === "all" ||
@@ -93,9 +104,7 @@ export default function Search() {
 
     if (e.target.id === "sort_order") {
       const sort = e.target.value.split("_")[0] || "created_at";
-
       const order = e.target.value.split("_")[1] || "desc";
-
       setSidebardata({ ...sidebardata, sort, order });
     }
   };
@@ -127,18 +136,17 @@ export default function Search() {
     }
     setListings([...listings, ...data]);
   };
+
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="p-7  border-b-2 md:border-r-2 md:min-h-screen">
+      <div className="p-7 border-b-2 md:border-r-2 md:min-h-screen">
         <form onSubmit={handleSubmit} className="flex flex-col gap-8">
           <div className="flex items-center gap-2">
-            <label className="whitespace-nowrap font-semibold">
-              Search Term:
-            </label>
+            <label className="whitespace-nowrap font-semibold">Search Term:</label>
             <input
               type="text"
               id="searchTerm"
-              placeholder="Search..."
+              placeholder={animatedSearchTerm}
               className="border rounded-lg p-3 w-full"
               value={sidebardata.searchTerm}
               onChange={handleChange}
@@ -148,8 +156,9 @@ export default function Search() {
             <label className="font-semibold">Type:</label>
             <div className="flex gap-2">
               <input
-                type="checkbox"
+                type="radio"
                 id="all"
+                name="type"
                 className="w-5"
                 onChange={handleChange}
                 checked={sidebardata.type === "all"}
@@ -158,8 +167,9 @@ export default function Search() {
             </div>
             <div className="flex gap-2">
               <input
-                type="checkbox"
+                type="radio"
                 id="rent"
+                name="type"
                 className="w-5"
                 onChange={handleChange}
                 checked={sidebardata.type === "rent"}
@@ -168,23 +178,14 @@ export default function Search() {
             </div>
             <div className="flex gap-2">
               <input
-                type="checkbox"
+                type="radio"
                 id="sale"
+                name="type"
                 className="w-5"
                 onChange={handleChange}
                 checked={sidebardata.type === "sale"}
               />
               <span>Sale</span>
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="checkbox"
-                id="offer"
-                className="w-5"
-                onChange={handleChange}
-                checked={sidebardata.offer}
-              />
-              <span>Offer</span>
             </div>
           </div>
           <div className="flex gap-2 flex-wrap items-center">
@@ -208,6 +209,16 @@ export default function Search() {
                 checked={sidebardata.furnished}
               />
               <span>Furnished</span>
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="checkbox"
+                id="offer"
+                className="w-5"
+                onChange={handleChange}
+                checked={sidebardata.offer}
+              />
+              <span>Offer</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
