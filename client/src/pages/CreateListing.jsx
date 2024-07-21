@@ -18,9 +18,9 @@ export default function CreateListing() {
     name: '',
     description: '',
     address: '',
-    type: 'rent',
-    bedrooms: 1,
-    bathrooms: 1,
+    type: 'sale',
+    bedrooms: 0,
+    bathrooms: 0,
     regularPrice: 50,
     discountPrice: 0,
     offer: false,
@@ -246,7 +246,7 @@ export default function CreateListing() {
               <input
                 type='number'
                 id='bedrooms'
-                min='1'
+                min='0'
                 max='10'
                 required
                 className='p-3 border border-gray-300 rounded-lg'
@@ -259,7 +259,7 @@ export default function CreateListing() {
               <input
                 type='number'
                 id='bathrooms'
-                min='1'
+                min='0'
                 max='10'
                 required
                 className='p-3 border border-gray-300 rounded-lg'
@@ -272,8 +272,8 @@ export default function CreateListing() {
               <input
                 type='number'
                 id='regularPrice'
-                min='1000'
-                max='1000000000000000'
+                min='1'
+                max='100000000000000000000'
                 required
                 className='p-3 border border-gray-300 rounded-lg'
                 onChange={handleChange}
@@ -293,7 +293,7 @@ export default function CreateListing() {
                   type='number'
                   id='discountPrice'
                   min='0'
-                  max='1000000000000'
+                  max='1000000000000000'
                   required
                   className='p-3 border border-gray-300 rounded-lg'
                   onChange={handleChange}

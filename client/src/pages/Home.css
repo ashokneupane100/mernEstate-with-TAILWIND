@@ -1,0 +1,53 @@
+/* styles.css */
+.sparkle-button {
+    position: relative;
+    overflow: hidden;
+    background-color: #2d6a4f; /* Default button color */
+  }
+  
+  .sparkle-button::before,
+  .sparkle-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0) 20%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 80%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  
+  .sparkle-button::after {
+    animation: sparkle 2s infinite;
+  }
+  
+  .sparkle-button:hover::before,
+  .sparkle-button:hover::after {
+    opacity: 1;
+  }
+  
+  @keyframes sparkle {
+    0% {
+      transform: translate(-50%, -50%) scale(0.8);
+      opacity: 0;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.2);
+      opacity: 0.8;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(0.8);
+      opacity: 0;
+    }
+  }
+  
+  .sparkle-button:hover {
+    background-color: #fcd34d; /* Hover button color */
+    color: #000;
+  }
+  

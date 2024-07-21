@@ -27,20 +27,27 @@ export default function ListingItem({ listing }) {
             </p>
           </div>
           <div className='text-slate-700 flex gap-12 '>
-            <div className='font-bold text-xs flex items-center gap-1 ml-2'>
-              
-              <FaBed className='h-4 w-4 text-green-700' />
-              {listing.bedrooms > 1
-                ? `${listing.bedrooms} beds `
-                : `${listing.bedrooms} bed `}
-            </div>
-            <div className='font-bold text-xs flex items-center gap-1'>
-              <FaBath className='h-4 w-4 text-green-700' />
-              {listing.bathrooms > 1
-                ? `${listing.bathrooms} baths `
-                : `${listing.bathrooms} bath `}
-            </div>
-          </div>
+      <div className='font-bold text-xs flex items-center gap-1 ml-2'>
+        {listing.bedrooms > 0 && (
+          <>
+            <FaBed className='h-4 w-4 text-green-700' />
+            {listing.bedrooms > 1
+              ? `${listing.bedrooms} beds `
+              : `${listing.bedrooms} bed `}
+          </>
+        )}
+      </div>
+      <div className='font-bold text-xs flex items-center gap-1'>
+        {listing.bathrooms > 0 && (
+          <>
+            <FaBath className='h-4 w-4 text-green-700' />
+            {listing.bathrooms > 1
+              ? `${listing.bathrooms} baths `
+              : `${listing.bathrooms} bath `}
+          </>
+        )}
+      </div>
+    </div>
           <div>
           <p className='text-sm text-gray-600 line-clamp-2'>
             {listing.description}

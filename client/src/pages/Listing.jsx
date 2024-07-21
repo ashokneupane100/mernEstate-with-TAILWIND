@@ -15,6 +15,7 @@ import {
 import numberToWords from "number-to-words";
 import { useSelector } from "react-redux";
 import Contact from "../components/Contact";
+import { makeLakhs } from "../utils/makeLakhs";
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
@@ -25,7 +26,6 @@ export default function Listing() {
   const { currentUser } = useSelector((state) => state.user);
   const [contact, setContact] = useState(false); // Initially false
   const params = useParams();
-  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
@@ -50,19 +50,7 @@ export default function Listing() {
     fetchListing();
   }, [params.listingId]);
 
-  const convertToIndianCurrencyWords = (num) => {
-    const crores = Math.floor(num / 10000000);
-    const lakhs = Math.floor((num % 10000000) / 100000);
-    const remainder = num % 100000;
-
-    let result = "";
-    if (crores > 0) result += `${numberToWords.toWords(crores)} Crores `;
-    if (lakhs > 0) result += `${numberToWords.toWords(lakhs)} Lakhs `;
-    if (remainder > 0) result += `and ${numberToWords.toWords(remainder)} `;
-
-    return result.trim();
-  };
-
+  
   const handleSignInClick = () => {
     sessionStorage.setItem("redirectPath", location.pathname);
   };
@@ -110,10 +98,10 @@ export default function Listing() {
 
           <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4">
             <p className="text-2xl font-semibold">
-              {listing.name}-Rs{" "}
+              {listing.name}{" "}-{" "}Rs{" "}
               {listing.offer
-                ? convertToIndianCurrencyWords(listing.discountPrice)
-                : convertToIndianCurrencyWords(listing.regularPrice)}
+                ? makeLakhs(listing.discountPrice)
+                : makeLakhs(listing.regularPrice)}
               {listing.type === "rent" && " Per Month"}
             </p>
             <p className="flex items-center mt-6 gap-2 text-slate-600 text-sm">
