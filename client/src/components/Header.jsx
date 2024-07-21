@@ -6,7 +6,9 @@ import { useEffect, useState } from 'react';
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState('');
+  const [placeholder, setPlaceholder] = useState('');
   const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams(window.location.search);
@@ -22,6 +24,24 @@ export default function Header() {
       setSearchTerm(searchTermFromUrl);
     }
   }, [location.search]);
+
+  useEffect(() => {
+    const text = "Type here to search properties ...";
+    let index = 0;
+
+    const interval = setInterval(() => {
+      setPlaceholder((prev) => {
+        if (index === text.length) {
+          index = 0;
+          return "";
+        }
+        return prev + text[index++];
+      });
+    }, 150);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <header className='bg-slate-200 shadow-md'>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
@@ -37,7 +57,7 @@ export default function Header() {
         >
           <input
             type='text'
-            placeholder='Search...'
+            placeholder={placeholder}
             className='bg-transparent focus:outline-none w-24 sm:w-64'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}

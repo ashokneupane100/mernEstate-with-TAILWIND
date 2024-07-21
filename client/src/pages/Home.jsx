@@ -53,12 +53,12 @@ export default function Home() {
     <div>
       {/* top */}
       <div className='flex flex-col gap-3 p-8 px-3 max-w-6xl mx-auto'>
-        <h1 className='text-slate-700 font-bold text-3xl lg:text-6xl'>
-          Namaste Welcome ! visit nepalhomeland.com for getting <span className='text-slate-500'>perfect</span>
+        <h1 className='text-slate-700 font-bold text-3xl lg:text-6xl text-center'>
+          Namaste Welcome ! Visit nepalhomeland.com for getting <span className='text-slate-500'>perfect</span>
           <br />
           place with ease and confidence.
         </h1>
-        <div className='text-gray-800 text-xs sm:text-sm'>
+        <div className='text-gray-800 text-xs sm:text-sm text-center'>
           Nepal Home Land is the best place to find your next perfect place to
           live.
           <br />
@@ -66,7 +66,7 @@ export default function Home() {
         </div>
         <Link to="/search">
           <button
-            className='bg-green-950 p-5 rounded-lg text-white text-3xl hover:bg-green-700 sparkle-button'
+            className='bg-green-950 p-5 rounded-lg text-white text-3xl hover:bg-green-700 sparkle-button w-full'
             style={{ marginBottom: '-60%' }}
           >
             Click here to Find your best place...
