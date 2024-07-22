@@ -49,5 +49,3 @@ app.use((err, req, res, next) => {
     message,
   });
 });
-
-//ready to be deployed ;
